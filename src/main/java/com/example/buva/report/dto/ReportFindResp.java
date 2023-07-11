@@ -2,9 +2,6 @@ package com.example.buva.report.dto;
 
 import com.example.buva.report.entity.Report;
 
-public record ReportFindResp(Long id, String username, String content) {
+import java.util.List;
 
-    public ReportFindResp(Report entity) {
-        this(entity.getId(), entity.getUsername(), entity.getContent());
-    }
-}
+public record ReportFindResp(List<Report> entity) {}
