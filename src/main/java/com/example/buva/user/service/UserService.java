@@ -26,9 +26,9 @@ public class UserService {
     public ResponseEntity<?> login(UserLoginReq userLoginReq) {
         User user = userRepository
                 .findByUsernameAndPassword(
-                        userLoginReq.getUsername(), userLoginReq.getPassword())
+                        userLoginReq.username(), userLoginReq.password())
                 .orElseThrow(() -> new IllegalArgumentException("해당 유저가 없습니다"));
-        if (passwordEncoder.matches(userLoginReq.getPassword(), user.getPassword())) {
+        if (passwordEncoder.matches(userLoginReq.password(), user.getPassword())) {
             String jwt = MyJwtProvider.create(user);
             return ResponseEntity.ok().header(MyJwtProvider.HEADER, jwt).body(new UserLoginResp(user));
         }
@@ -58,10 +58,10 @@ public class UserService {
 
     @Transactional
     public ResponseEntity<?> update(MyUserDetails myUserDetails, UserUpdateReq userUpdateReq) {
-        User user = userRepository.findById(myUserDetails.getUser().getId())
+        User user = userRepository.findById(myUserDetails.user().getId())
                 .orElseThrow(() -> new IllegalArgumentException("해당 유저가 없습니다"));
 
-        user.update(userUpdateReq.getPassword());
+        user.update(userUpdateReq.password());
 
         return ResponseEntity.ok().body(new UserUpdateResp(user));
     }

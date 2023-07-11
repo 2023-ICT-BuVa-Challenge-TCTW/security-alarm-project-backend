@@ -1,14 +1,12 @@
 package com.example.buva.global.security;
 
 import com.example.buva.user.entity.User;
-import lombok.Getter;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import java.util.ArrayList;
 import java.util.Collection;
 
-@Getter
 public record MyUserDetails(User user) implements UserDetails {
 
     @Override
