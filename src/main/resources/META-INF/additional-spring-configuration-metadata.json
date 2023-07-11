@@ -1,0 +1,17 @@
+{"properties": [
+  {
+    "name": "sms.access-key",
+    "type": "java.lang.String",
+    "description": "A description for 'sms.access-key'"
+  },
+  {
+    "name": "sms.serviceId",
+    "type": "java.lang.String",
+    "description": "A description for 'sms.serviceId'"
+  },
+  {
+    "name": "sms.secretKey",
+    "type": "java.lang.String",
+    "description": "A description for 'sms.secretKey'"
+  }
+]}
