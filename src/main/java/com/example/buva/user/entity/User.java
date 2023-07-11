@@ -3,6 +3,8 @@ package com.example.buva.user.entity;
 import com.example.buva.global.entity.BaseTimeEntity;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -24,14 +26,23 @@ public class User extends BaseTimeEntity {
     private String username;
     @Column(nullable = false)
     private String password;
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
+    private Role role;
 
     @Builder
-    public User(String username, String password) {
+    public User(Long id, String username, String password) {
+        this.id = id;
         this.username = username;
         this.password = password;
+        this.role = Role.USER;
     }
 
     public void update(String password) {
         this.password = password;
+    }
+
+    public String getRoleKey() {
+        return this.role.getKey();
     }
 }
