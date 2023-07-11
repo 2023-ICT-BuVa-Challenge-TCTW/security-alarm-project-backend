@@ -9,12 +9,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 
 @Getter
-public class MyUserDetails implements UserDetails {
-    private User user;
-
-    public MyUserDetails(User user) {
-        this.user = user;
-    }
+public record MyUserDetails(User user) implements UserDetails {
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
@@ -32,6 +27,7 @@ public class MyUserDetails implements UserDetails {
     public String getUsername() {
         return user.getUsername();
     }
+
     @Override
     public boolean isAccountNonExpired() {
         return true;

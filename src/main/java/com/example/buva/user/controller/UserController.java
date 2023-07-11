@@ -1,8 +1,11 @@
 package com.example.buva.user.controller;
 
+import com.example.buva.user.dto.UserJoinReq;
 import com.example.buva.user.dto.UserLoginReq;
 import com.example.buva.user.service.UserService;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
@@ -14,20 +17,17 @@ public class UserController {
     private final UserService userService;
 
     @PostMapping("/login")
-    public String login(@RequestBody UserLoginReq userLoginReq) {
-        userService.login(userLoginReq);
-        return "login";
+    public ResponseEntity<?> login(@RequestBody @Valid UserLoginReq userLoginReq) {
+        return userService.login(userLoginReq);
     }
 
     @PostMapping("/join")
-    public String join() {
-        userService.join();
-        return "login";
+    public ResponseEntity<?> join(@RequestBody @Valid UserJoinReq userJoinReq) {
+        return userService.join(userJoinReq);
     }
 
     @PostMapping("/update")
-    public String update() {
-        userService.update();
-        return "login";
+    public ResponseEntity<?> update() {
+        return userService.update();
     }
 }
