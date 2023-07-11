@@ -1,10 +1,13 @@
 package com.example.buva.user.service;
 
 import com.example.buva.global.jwt.MyJwtProvider;
+import com.example.buva.global.security.MyUserDetails;
 import com.example.buva.user.dto.UserJoinReq;
 import com.example.buva.user.dto.UserJoinResp;
 import com.example.buva.user.dto.UserLoginReq;
 import com.example.buva.user.dto.UserLoginResp;
+import com.example.buva.user.dto.UserUpdateReq;
+import com.example.buva.user.dto.UserUpdateResp;
 import com.example.buva.user.entity.User;
 import com.example.buva.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
@@ -12,7 +15,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
 
 @Service
 @RequiredArgsConstructor
@@ -55,6 +57,12 @@ public class UserService {
     }
 
     @Transactional
-    public void update() {
+    public ResponseEntity<?> update(MyUserDetails myUserDetails, UserUpdateReq userUpdateReq) {
+        User user = userRepository.findById(myUserDetails.getUser().getId())
+                .orElseThrow(() -> new IllegalArgumentException("해당 유저가 없습니다"));
+
+        user.update(userUpdateReq.getPassword());
+
+        return ResponseEntity.ok().body(new UserUpdateResp(user));
     }
 }
