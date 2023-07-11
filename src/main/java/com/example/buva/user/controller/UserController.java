@@ -27,7 +27,7 @@ public class UserController {
     }
 
     @PostMapping("/update")
-    public ResponseEntity<?> update() {
+    public ResponseEntity<?> update(@RequestBody @Valid ) {
         return userService.update();
     }
 }

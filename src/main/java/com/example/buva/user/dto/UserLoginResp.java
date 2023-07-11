@@ -6,8 +6,8 @@ import lombok.Getter;
 @Getter
 public class UserLoginResp {
 
-    private Long id;
-    private String username;
+    private final Long id;
+    private final String username;
 
     public UserLoginResp(User entity) {
         this.id = entity.getId();
