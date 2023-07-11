@@ -22,7 +22,7 @@ repositories {
 }
 
 dependencies {
-    // implementation 'com.fasterxml.jackson.datatype:jackson-datatype-jsr310:2.3.0-rc1'
+    implementation 'org.springframework.boot:spring-boot-starter-security'
     implementation 'org.apache.httpcomponents.client5:httpclient5:5.1.3'
     implementation 'commons-codec:commons-codec:1.15'
     implementation 'org.springframework.boot:spring-boot-starter-validation'
