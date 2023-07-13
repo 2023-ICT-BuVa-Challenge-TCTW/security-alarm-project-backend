@@ -1,5 +1,6 @@
 package com.example.buva.police.repository;
 
+import com.example.buva.police.dto.PoliceFindReq;
 import com.example.buva.police.entity.Police;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
@@ -7,6 +8,12 @@ import org.springframework.data.jpa.repository.Query;
 import java.util.List;
 
 public interface PoliceRepository extends JpaRepository<Police, Long> {
-//    @Query(value = "select t from Police t where dwithin(t.gps, :point, 30000, false) = true")
-//    List<Police> findPoliceByDistance(@Param("point") Point point);
+    @Query(value = "SELECT *, " +
+            "(6371 * acos(cos(radians(:lat)) * cos(radians(latitude)) * cos(radians(longitude) - radians(:lon)) " +
+            "+ sin(radians(:lat)) * sin(radians(latitude)))) AS distance " +
+            "FROM police " +
+            "HAVING distance <= :radius " +
+            "ORDER BY distance " +
+            "LIMIT 0, 100", nativeQuery = true)
+    List<Police> findPoliceByDistance(double lat, double lon, Integer radius);
 }

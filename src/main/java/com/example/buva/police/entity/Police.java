@@ -23,6 +23,6 @@ public class Police {
     private String division;
     private String phone;
     private String address;
-    @Column(nullable = false, columnDefinition = "GEOMETRY")
-    private Point point;
+    private double latitude;
+    private double longitude;
 }
