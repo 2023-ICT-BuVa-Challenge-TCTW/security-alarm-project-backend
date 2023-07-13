@@ -8,7 +8,5 @@ public class BuvaApplication {
     
     public static void main(String[] args) {
         SpringApplication.run(BuvaApplication.class, args);
-        
     }
-
 }

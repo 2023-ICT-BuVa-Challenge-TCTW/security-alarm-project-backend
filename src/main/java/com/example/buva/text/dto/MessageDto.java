@@ -11,5 +11,5 @@ import lombok.Setter;
 @Getter
 public class MessageDto {
     private String to;
-        private String content;
+    private String content;
 }
