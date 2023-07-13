@@ -9,7 +9,7 @@ import lombok.Setter;
 @NoArgsConstructor
 @Setter
 @Getter
-public class SMSResponse {
+public class TextResp {
     private String requestId; 
     private String requestTime; 
     private String statusCode; 
