@@ -1,6 +1,5 @@
 package com.example.buva.text.dto;
 
-import java.util.List;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -11,7 +10,7 @@ import lombok.Setter;
 @NoArgsConstructor
 @Setter
 @Getter
-public class SMSRequest {
+public class SMSReq{
     private String type;
     private String contentType;
     private String countryCode;
@@ -19,5 +18,5 @@ public class SMSRequest {
     private String content;
     // private String reserveTime;
     // private String reserveTimeZone;
-    private List<MessageDto> messages;
+    private MessageDto message;
 }
