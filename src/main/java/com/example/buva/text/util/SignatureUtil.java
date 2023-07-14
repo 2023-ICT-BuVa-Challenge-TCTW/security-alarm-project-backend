@@ -27,8 +27,6 @@ public class SignatureUtil {
         String newLine = "\n";
         String method = "GET";
         String url = "/photos/puppy.jpg?query1=&query2";
-        System.out.println("UtilTimestamp"+timestamp);
-        System.out.println("SignatureUtil"+ secretKey);
 
         String message = new StringBuilder()
                 .append(method)
