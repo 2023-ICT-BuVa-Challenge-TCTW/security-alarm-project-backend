@@ -1,32 +1,25 @@
 package com.example.buva.text.util;
 
 import java.io.UnsupportedEncodingException;
+import java.nio.charset.StandardCharsets;
 import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
-
 import javax.crypto.Mac;
 import javax.crypto.spec.SecretKeySpec;
-
+import lombok.RequiredArgsConstructor;
 import org.apache.commons.codec.binary.Base64;
 
-
+@RequiredArgsConstructor
 public class SignatureUtil {
 
-    private final String timestamp;
-    private final String accessKey;
-    private final String secretKey;
-
-    public SignatureUtil(String timestamp, String accessKey, String secretKey) {
-        this.timestamp = timestamp;
-        this.accessKey = accessKey;
-        this.secretKey = secretKey;
-    }
-
-    public String makeSignature() throws IllegalStateException, UnsupportedEncodingException, NoSuchAlgorithmException, InvalidKeyException {
+    public static String makeSignature(String timestamp,
+                                       String serviceId,
+                                       String accessKey,
+                                       String secretKey) throws IllegalStateException, UnsupportedEncodingException, NoSuchAlgorithmException, InvalidKeyException {
         String space = " ";
         String newLine = "\n";
-        String method = "GET";
-        String url = "/photos/puppy.jpg?query1=&query2";
+        String method = "POST";
+        String url = "/sms/v2/services/"+ serviceId + "/messages";
 
         String message = new StringBuilder()
                 .append(method)
@@ -38,14 +31,12 @@ public class SignatureUtil {
                 .append(accessKey)
                 .toString();
 
-        SecretKeySpec signingKey = new SecretKeySpec(secretKey.getBytes("UTF-8"), "HmacSHA256");
+        SecretKeySpec signingKey = new SecretKeySpec(secretKey.getBytes(StandardCharsets.UTF_8), "HmacSHA256");
         Mac mac = Mac.getInstance("HmacSHA256");
         mac.init(signingKey);
 
-        byte[] rawHmac = mac.doFinal(message.getBytes("UTF-8"));
-        String encodeBase64String = Base64.encodeBase64String(rawHmac);
+        byte[] rawHmac = mac.doFinal(message.getBytes(StandardCharsets.UTF_8));
 
-        return encodeBase64String;
+        return Base64.encodeBase64String(rawHmac);
     }
-
 }

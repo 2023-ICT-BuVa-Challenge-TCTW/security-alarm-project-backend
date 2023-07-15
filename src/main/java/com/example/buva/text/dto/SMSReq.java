@@ -1,22 +1,16 @@
 package com.example.buva.text.dto;
 
-
-import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import java.util.List;
 
-@AllArgsConstructor
-@NoArgsConstructor
-@Setter
 @Getter
+@Builder
 public class SMSReq{
     private String type;
     private String contentType;
     private String countryCode;
     private String from;
     private String content;
-    // private String reserveTime;
-    // private String reserveTimeZone;
-    private MessageDto message;
+    private List<MessageDto> messages;
 }

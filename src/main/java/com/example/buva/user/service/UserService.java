@@ -23,12 +23,11 @@ public class UserService {
     private final BCryptPasswordEncoder passwordEncoder;
 
     @Transactional(readOnly = true)
-    public ResponseEntity<?> login(UserLoginReq userLoginReq) {
+    public ResponseEntity<?> login(UserLoginReq userLoginReq) {// 60Byte
         User user = userRepository
-                .findByUsernameAndPassword(
-                        userLoginReq.username(), userLoginReq.password())
+                .findByUsername(userLoginReq.getUsername())
                 .orElseThrow(() -> new IllegalArgumentException("해당 유저가 없습니다"));
-        if (passwordEncoder.matches(userLoginReq.password(), user.getPassword())) {
+        if (passwordEncoder.matches(userLoginReq.getPassword(), user.getPassword())) {
             String jwt = MyJwtProvider.create(user);
             return ResponseEntity.ok().header(MyJwtProvider.HEADER, jwt).body(new UserLoginResp(user));
         }
