@@ -23,6 +23,7 @@ public class SmsController {
         
     @PostMapping("/sms/send")
     public ResponseEntity<SMSResp> sendSMS(@RequestBody MessageDto messageDto) throws JsonProcessingException, InvalidKeyException, IllegalStateException, UnsupportedEncodingException, NoSuchAlgorithmException{
+        System.out.println(messageDto.getTo() + messageDto.getContent());
         SMSResp data = smsService.sendSMS(messageDto.getTo(), messageDto.getContent());
         return ResponseEntity.ok().body(data);
     }
