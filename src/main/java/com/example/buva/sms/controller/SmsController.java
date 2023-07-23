@@ -3,6 +3,7 @@ package com.example.buva.sms.controller;
 import java.io.UnsupportedEncodingException;
 import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
+import java.util.concurrent.ExecutionException;
 
 import com.example.buva.sms.dto.SmsInsertReq;
 import org.springframework.http.ResponseEntity;
@@ -23,7 +24,7 @@ public class SmsController {
     private final SmsService smsService;
         
     @PostMapping("/sms/send")
-    public ResponseEntity<SmsInsertResp> sendSMS(@RequestBody SmsInsertReq smsInsertReq) throws JsonProcessingException, InvalidKeyException, IllegalStateException, UnsupportedEncodingException, NoSuchAlgorithmException{
+    public ResponseEntity<SmsInsertResp> sendSMS(@RequestBody SmsInsertReq smsInsertReq) throws JsonProcessingException, InvalidKeyException, IllegalStateException, UnsupportedEncodingException, NoSuchAlgorithmException, ExecutionException, InterruptedException {
         SmsInsertResp data = smsService.sendSMS(smsInsertReq.getTo(),
                 smsInsertReq.getContent(), smsInsertReq.getReserveTime());
         return ResponseEntity.ok().body(data);

@@ -4,36 +4,36 @@ import java.io.UnsupportedEncodingException;
 import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
 import java.time.Instant;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.ExecutionException;
 
 import com.example.buva.sms.dto.SmsInsertReq;
-import org.springframework.http.HttpEntity;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.MediaType;
-import org.springframework.http.client.HttpComponentsClientHttpRequestFactory;
+import com.example.buva.sms.util.SendSms;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.client.RestTemplate;
-
-import com.example.buva.sms.dto.SmsApiDto;
 import com.example.buva.sms.dto.SmsInsertResp;
 import com.example.buva.sms.util.SignatureUtil;
 import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
 
 @Service
+@RequiredArgsConstructor
 public class SmsService {
 
 	private static final String serviceId = System.getenv("NCLOUD_SERVICE_ID");
 	private static final String accessKey = System.getenv("NCLOUD_ACCESS_KEY");
 	private static final String secretKey = System.getenv("NCLOUD_SECRET_KEY");
-	private static final String phoneNumber = System.getenv("PHONE_NUMBER");
+
+	private final SendSms sendSms;
 
 	@Transactional
 	public SmsInsertResp sendSMS(String to, String content, String reserveTime) throws JsonProcessingException, InvalidKeyException,
-			IllegalStateException, UnsupportedEncodingException, NoSuchAlgorithmException {
+			IllegalStateException, UnsupportedEncodingException, NoSuchAlgorithmException, ExecutionException, InterruptedException {
 
 		long elapsedTimeMillis = Instant.now().toEpochMilli();
 		String timestamp = String.valueOf(elapsedTimeMillis);
@@ -43,29 +43,18 @@ public class SmsService {
 		List<SmsInsertReq.MessageDto> messages = new ArrayList<>();
 		messages.add(new SmsInsertReq.MessageDto(to, content));
 
-		SmsApiDto smsReq = SmsApiDto.builder()
-				.type("SMS")
-				.contentType("COMM")
-				.countryCode("82")
-				.from(phoneNumber)
-				.content("캣챠 앱에서 보내는 긴급신고 문자입니다")
-				.messages(messages)
-				.reserveTime(reserveTime)
-				.reserveTimeZone("Asia/Seoul")
-				.build();
+		LocalDateTime currentTime = LocalDateTime.now();
 
-		HttpHeaders headers = new HttpHeaders();
-		headers.setContentType(MediaType.parseMediaType("application/json; charset=UTF-8"));
-		headers.set("x-ncp-apigw-timestamp", timestamp);
-		headers.set("x-ncp-iam-access-key", accessKey);
-		headers.set("x-ncp-apigw-signature-v2", signature);
+		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
+		LocalDateTime targetTime = LocalDateTime.parse(reserveTime, formatter);
 
-		ObjectMapper objectMapper = new ObjectMapper();
-		String jsonBody = objectMapper.writeValueAsString(smsReq);
-		HttpEntity<String> requestEntity = new HttpEntity<>(jsonBody, headers);
+		long timeDifferenceMillis  = ChronoUnit.MILLIS.between(currentTime, targetTime);
 
-		RestTemplate restTemplate = new RestTemplate();
-		restTemplate.setRequestFactory(new HttpComponentsClientHttpRequestFactory());
-		return restTemplate.postForObject(apiUrl, requestEntity, SmsInsertResp.class);
+		if (Math.abs(timeDifferenceMillis ) <= 11 * 60 * 1000) {
+			CompletableFuture<SmsInsertResp> smsInsertRespFuture = sendSms.sendSmsWithin11Minutes(timeDifferenceMillis, messages, timestamp, signature, apiUrl);
+			return smsInsertRespFuture.get();
+		} else {
+			return sendSms.sendSmsMoreThan11Minutes(messages, reserveTime, timestamp, signature, apiUrl);
+		}
 	}
 }
