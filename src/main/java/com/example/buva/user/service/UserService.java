@@ -11,10 +11,13 @@ import com.example.buva.user.dto.UserUpdateResp;
 import com.example.buva.user.entity.User;
 import com.example.buva.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -39,6 +42,12 @@ public class UserService {
         String rawPassword = userJoinReq.getPassword();
         String encPassword = passwordEncoder.encode(rawPassword); // 60Byte
         userJoinReq.setPassword(encPassword);
+
+        Optional<User> userOptional = userRepository.findByUsername(userJoinReq.getUsername());
+
+        if (userOptional.isPresent()) {
+            throw new DataIntegrityViolationException("사용자가 이미 존재합니다");
+        }
 
         userRepository.save(userJoinReq.toEntity());
 
