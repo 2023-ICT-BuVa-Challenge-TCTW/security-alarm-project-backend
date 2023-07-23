@@ -5,6 +5,7 @@ import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
 import java.util.concurrent.ExecutionException;
 
+import com.example.buva.sms.dto.SmsCancelReq;
 import com.example.buva.sms.dto.SmsInsertReq;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -30,9 +31,8 @@ public class SmsController {
         return ResponseEntity.ok().body(data);
     }
 
-//    @DeleteMapping ("/sms/delete")
-//    public ResponseEntity<SmsInsertResp> deleteSMS(@RequestBody MessageDto messageDto) throws JsonProcessingException, InvalidKeyException, IllegalStateException, UnsupportedEncodingException, NoSuchAlgorithmException{
-//        SmsInsertResp data = smsService.deleteSMS(messageDto.getTo(), messageDto.getContent());
-//        return ResponseEntity.ok().body(data);
-//    }
+    @DeleteMapping ("/sms/cancel")
+    public ResponseEntity<?> cancelSMS(@RequestBody SmsCancelReq smsCancelReq) throws UnsupportedEncodingException, NoSuchAlgorithmException, InvalidKeyException {
+        return ResponseEntity.ok().body(smsService.cancelSMS(smsCancelReq.getRequestId()));
+    }
 }

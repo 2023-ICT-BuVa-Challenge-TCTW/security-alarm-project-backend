@@ -8,7 +8,9 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpMethod;
 import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.http.client.HttpComponentsClientHttpRequestFactory;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
@@ -83,5 +85,17 @@ public class SendSms {
 
         restTemplate.setRequestFactory(new HttpComponentsClientHttpRequestFactory());
         return restTemplate.postForObject(apiUrl, requestEntity, SmsInsertResp.class);
+    }
+
+    public ResponseEntity<?> getSmsCancelResp(String timestamp, String signature, String apiUrl) {
+        HttpHeaders headers = new HttpHeaders();
+        headers.set("x-ncp-apigw-timestamp", timestamp);
+        headers.set("x-ncp-iam-access-key", accessKey);
+        headers.set("x-ncp-apigw-signature-v2", signature);
+
+        HttpEntity<String> requestEntity = new HttpEntity<>(headers);
+
+        restTemplate.setRequestFactory(new HttpComponentsClientHttpRequestFactory());
+        return restTemplate.exchange(apiUrl, HttpMethod.DELETE, requestEntity, void.class);
     }
 }

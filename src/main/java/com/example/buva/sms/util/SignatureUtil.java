@@ -39,4 +39,33 @@ public class SignatureUtil {
 
         return Base64.encodeBase64String(rawHmac);
     }
+
+    public static String makeSignatureForCancel(String timestamp,
+                                                String serviceId,
+                                                String accessKey,
+                                                String secretKey,
+                                                String requestId) throws IllegalStateException, UnsupportedEncodingException, NoSuchAlgorithmException, InvalidKeyException {
+        String space = " ";
+        String newLine = "\n";
+        String method = "DELETE";
+        String url = "/sms/v2/services/"+ serviceId + "/reservations/" +requestId;
+
+        String message = new StringBuilder()
+                .append(method)
+                .append(space)
+                .append(url)
+                .append(newLine)
+                .append(timestamp)
+                .append(newLine)
+                .append(accessKey)
+                .toString();
+
+        SecretKeySpec signingKey = new SecretKeySpec(secretKey.getBytes(StandardCharsets.UTF_8), "HmacSHA256");
+        Mac mac = Mac.getInstance("HmacSHA256");
+        mac.init(signingKey);
+
+        byte[] rawHmac = mac.doFinal(message.getBytes(StandardCharsets.UTF_8));
+
+        return Base64.encodeBase64String(rawHmac);
+    }
 }

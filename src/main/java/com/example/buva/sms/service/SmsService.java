@@ -15,6 +15,7 @@ import java.util.concurrent.ExecutionException;
 import com.example.buva.sms.dto.SmsInsertReq;
 import com.example.buva.sms.util.SendSms;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import com.example.buva.sms.dto.SmsInsertResp;
@@ -56,5 +57,17 @@ public class SmsService {
 		} else {
 			return sendSms.sendSmsMoreThan11Minutes(messages, reserveTime, timestamp, signature, apiUrl);
 		}
+	}
+
+	@Transactional
+	public ResponseEntity<?> cancelSMS(String requestId) throws UnsupportedEncodingException, NoSuchAlgorithmException, InvalidKeyException {
+
+		long elapsedTimeMillis = Instant.now().toEpochMilli();
+		String timestamp = String.valueOf(elapsedTimeMillis);
+		String signature = SignatureUtil.makeSignatureForCancel(timestamp, serviceId, accessKey, secretKey, requestId);
+		String apiUrl = "https://sens.apigw.ntruss.com/sms/v2/services/" + serviceId +
+				"/reservations/" + requestId;
+
+		return sendSms.getSmsCancelResp(timestamp, signature, apiUrl);
 	}
 }
