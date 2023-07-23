@@ -29,7 +29,7 @@ public class UserController {
         return userService.join(userJoinReq);
     }
 
-    @PostMapping("/update")
+    @PostMapping("/api/user/update")
     public ResponseEntity<?> update(@AuthenticationPrincipal MyUserDetails myUserDetails,
                                     @RequestBody @Valid UserUpdateReq userUpdateReq) {
         return userService.update(myUserDetails, userUpdateReq);

@@ -15,7 +15,7 @@ public class PoliceController {
 
     private final PoliceService policeService;
 
-    @GetMapping("/police")
+    @GetMapping("/api/police")
     public ResponseEntity<?> findPolice(@RequestBody @Valid PoliceFindReq policeFindReq) {
         return policeService.findPolice(policeFindReq);
     }

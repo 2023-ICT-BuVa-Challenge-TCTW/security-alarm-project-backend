@@ -19,13 +19,13 @@ public class MessageController {
 
     private final MessageService messageService;
 
-    @PostMapping("/messages")
+    @PostMapping("/api/messages")
     public ResponseEntity<?> insertMessage(@AuthenticationPrincipal MyUserDetails myUserDetails,
                                            @RequestBody @Valid MessageInsertReq messageInsertReq) {
         return messageService.insertMessage(myUserDetails, messageInsertReq);
     }
 
-    @GetMapping("/messages")
+    @GetMapping("/api/messages")
     public ResponseEntity<?> getMessages(@AuthenticationPrincipal MyUserDetails myUserDetails,
                                          @RequestBody @Valid MessageFindReq messageFindReq) {
         return messageService.getMessages(myUserDetails, messageFindReq);

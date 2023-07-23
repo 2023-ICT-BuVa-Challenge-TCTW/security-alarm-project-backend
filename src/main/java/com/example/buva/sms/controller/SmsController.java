@@ -24,14 +24,14 @@ import lombok.RequiredArgsConstructor;
 public class SmsController {
     private final SmsService smsService;
         
-    @PostMapping("/sms/send")
+    @PostMapping("/api/sms/send")
     public ResponseEntity<SmsInsertResp> sendSMS(@RequestBody SmsInsertReq smsInsertReq) throws JsonProcessingException, InvalidKeyException, IllegalStateException, UnsupportedEncodingException, NoSuchAlgorithmException, ExecutionException, InterruptedException {
         SmsInsertResp data = smsService.sendSMS(smsInsertReq.getTo(),
                 smsInsertReq.getContent(), smsInsertReq.getReserveTime());
         return ResponseEntity.ok().body(data);
     }
 
-    @DeleteMapping ("/sms/cancel")
+    @DeleteMapping ("/api/sms/cancel")
     public ResponseEntity<?> cancelSMS(@RequestBody SmsCancelReq smsCancelReq) throws UnsupportedEncodingException, NoSuchAlgorithmException, InvalidKeyException {
         return ResponseEntity.ok().body(smsService.cancelSMS(smsCancelReq.getRequestId()));
     }

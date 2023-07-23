@@ -19,13 +19,13 @@ public class ReportController {
 
     private final ReportService reportService;
 
-    @PostMapping("/reports")
+    @PostMapping("/api/reports")
     public ResponseEntity<?> insertReport(@AuthenticationPrincipal MyUserDetails myUserDetails,
                                           @RequestBody @Valid ReportInsertReq reportInsertReq) {
         return reportService.insertReport(myUserDetails, reportInsertReq);
     }
 
-    @GetMapping("/reports")
+    @GetMapping("/api/reports")
     public ResponseEntity<?> getReports(@AuthenticationPrincipal MyUserDetails myUserDetails,
                                         @RequestBody @Valid ReportFindReq reportFindReq) {
         return reportService.getReports(myUserDetails, reportFindReq);
