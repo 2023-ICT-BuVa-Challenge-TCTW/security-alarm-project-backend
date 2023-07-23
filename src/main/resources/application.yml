@@ -20,7 +20,3 @@ spring:
     h2:
       console:
         enabled: true
-sms:
-  serviceId: ncp:sms:kr:311508451471:timer-alarm
-  accessKey: AxQrp3kN4nhlMfAI3O9E
-  secretKey: WsMKFmj6X6TfiQFyW5OsYu33nBm5ZyM5UDZjJLgM

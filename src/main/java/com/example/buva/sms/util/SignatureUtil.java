@@ -1,4 +1,4 @@
-package com.example.buva.text.util;
+package com.example.buva.sms.util;
 
 import java.io.UnsupportedEncodingException;
 import java.nio.charset.StandardCharsets;

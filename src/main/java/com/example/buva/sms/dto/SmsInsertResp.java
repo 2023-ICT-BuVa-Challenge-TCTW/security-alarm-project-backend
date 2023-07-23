@@ -1,11 +1,11 @@
-package com.example.buva.text.dto;
+package com.example.buva.sms.dto;
 
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 @NoArgsConstructor
 @Getter
-public class SMSResp {
+public class SmsInsertResp {
     private String requestId; 
     private String requestTime;
     private String statusCode; 
